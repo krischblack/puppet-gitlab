@@ -68,9 +68,9 @@ class gitlab::packages inherits ::gitlab {
     }
   }
 
-  package { 'openssh-server':
-    ensure => latest,
-  }
+  # package { 'openssh-server':
+  #   ensure => latest,
+  # }
   package { $mail_application:
     ensure => latest,
   }
