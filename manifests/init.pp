@@ -373,62 +373,6 @@
 # 5. Omnibus customization
 # ==========================
 #
-# [*postgresql_enable*]
-#     default => true
-#     Set to false if using MySQL or if managing postgreSQL outside of Omnibus
-#
-# [*mysql_enable*]
-#     default => false
-#     For enterprise only, use MySQL instead of PostgreSQL
-#
-# [*db_encoding*]
-#     default => undef
-#     The database encoding. Only available if `postgresql_enable` is false
-#     or `mysql_enable` is true.
-#     Example: 'unicode'
-#
-# [*db_database*]
-#     default => undef
-#     The database name. Only available if `postgresql_enable` is false
-#     or `mysql_enable` is true.
-#     Example: 'gitlabhq_production'
-#
-# [*db_pool*]
-#     default => 10
-#     The database pool size. Only available if `postgresql_enable` is false
-#     or `mysql_enable` is true.
-#     Example: 20
-#
-# [*db_username*]
-#     default => 'git'
-#     The database username. Only available if `postgresql_enable` is false
-#     or `mysql_enable` is true.
-#     Example: 'gitlab'
-#
-# [*db_password*]
-#     default => undef
-#     The database password. Only available if `postgresql_enable` is false
-#     or `mysql_enable` is true.
-#     Example: 'secret_password'
-#
-# [*db_host*]
-#     default => undef
-#     The database hostname. Only available if `postgresql_enable` is false
-#     or `mysql_enable` is true.
-#     Example: '127.0.0.1'
-#
-# [*db_socket*]
-#     default => undef
-#     Specify a database socket to use instead of a port. Only available if
-#     `postgresql_enable` is false or `mysql_enable` is true.
-#     Example: 'unix://path/to/db/socket.sock'
-#
-# [*db_port*]
-#     default => undef
-#     The database port. This value must be set to match `postgresql_port` if
-#     that value is changed,
-#     Example: 5432
-#
 # [*postgresql_port*]
 #     default => undef
 #     Port postgres runs on
@@ -609,6 +553,65 @@
 #     default => undef
 #     Prevents omnibus-gitlab services (nginx, redis, unicorn etc.) from starting before a given filesystem is mounted
 #     Example: '/tmp'
+#
+# 5. Database customization
+# ==========================
+#
+# [*postgresql_enable*]
+#     default => true
+#     Set to false if using MySQL or if managing postgreSQL outside of Omnibus
+#
+# [*mysql_enable*]
+#     default => false
+#     For enterprise only, use MySQL instead of PostgreSQL
+#
+# [*db_encoding*]
+#     default => undef
+#     The database encoding. Only available if `postgresql_enable` is false
+#     or `mysql_enable` is true.
+#     Example: 'utf-8'
+#
+# [*db_database*]
+#     default => undef
+#     The database name. Only available if `postgresql_enable` is false
+#     or `mysql_enable` is true.
+#     Example: 'gitlabhq_production'
+#
+# [*db_pool*]
+#     default => 10
+#     The database pool size. Only available if `postgresql_enable` is false
+#     or `mysql_enable` is true.
+#     Example: 20
+#
+# [*db_username*]
+#     default => 'git'
+#     The database username. Only available if `postgresql_enable` is false
+#     or `mysql_enable` is true.
+#     Example: 'gitlab'
+#
+# [*db_password*]
+#     default => undef
+#     The database password. Only available if `postgresql_enable` is false
+#     or `mysql_enable` is true.
+#     Example: 'secret_password'
+#
+# [*db_host*]
+#     default => undef
+#     The database hostname. Only available if `postgresql_enable` is false
+#     or `mysql_enable` is true.
+#     Example: '127.0.0.1'
+#
+# [*db_socket*]
+#     default => undef
+#     Specify a database socket to use instead of a port. Only available if
+#     `postgresql_enable` is false or `mysql_enable` is true.
+#     Example: 'unix://path/to/db/socket.sock'
+#
+# [*db_port*]
+#     default => undef
+#     The database port. This value must be set to match `postgresql_port` if
+#     that value is changed,
+#     Example: 5432
 #
 # === Examples
 #
@@ -916,11 +919,12 @@ class gitlab (
     }
   }
 
-  if ($db_adapter or $db_encoding or $db_database or $db_pool or $db_username
-    or $db_password or $db_host or $db_socket)
-    and ($postgresql_enable == undef or $postgresql_enable or !$mysql_enable) {
-    fail('db_adapter, db_encoding, db_database, db_pool, db_username, db_password, db_host, and db_socket cannot be set unless postgres_enable is false or mysql_enable is true')
-  }
+  ### TODO wieder so a komische abfrage einbauen
+  # if ($db_adapter or $db_encoding or $db_database or $db_pool or $db_username
+  #   or $db_password or $db_host or $db_socket)
+  #   and ($postgresql_enable == undef or $postgresql_enable or !$mysql_enable) {
+  #   fail('db_adapter, db_encoding, db_database, db_pool, db_username, db_password, db_host, and db_socket cannot be set unless postgres_enable is false or mysql_enable is true')
+  # }
 
   if $postgresql_port and !$db_port {
     fail('if postgresql_port is specified, db_port must match')

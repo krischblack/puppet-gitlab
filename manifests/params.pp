@@ -136,18 +136,6 @@ class gitlab::params {
   #
   # 5. Omnibus customization
   # ==========================
-  $postgresql_enable  = true
-  $mysql_enable       = false
-  $db_adapter         = undef # (default: 'postgresql')
-  $db_encoding        = undef # (default: 'unicode')
-  $db_database        = undef # (default: 'gitlabhq_production')
-  $db_pool            = undef # (default: 10)
-  $db_username        = undef # (default: 'gitlab')
-  $db_password        = undef # (default: nil)
-  $db_host            = undef # (default: nil)
-  $db_port            = undef # (default: 5432)
-  $db_socket          = undef # (default: nil)
-
   $redis_port       = undef # (default: 6379)
   $postgresql_port  = undef # (default: 5432)
   $unicorn_port     = undef # (default: 8080)
@@ -188,15 +176,6 @@ class gitlab::params {
   $nginx_enable              = true # make use of the packaged nginx (default true)
   $unicorn_listen_ip         = undef # unicorn listening ip (default: 127.0.0.1)
 
-  $postgresql_enable         = true
-  $db_adapter                = 'postgresql'
-  $db_encoding               = 'unicode'
-  $db_host                   = 'localhost'
-  $db_port                   = 5432
-  $db_username               = 'git'
-  $db_password               = undef
-
-
   # Below are the default values
   $svlogd_size      = 200 * 1024 * 1024 # rotate after 200 MB of log data
   $svlogd_num       = 30 # keep 30 rotated log files
@@ -210,7 +189,20 @@ class gitlab::params {
   $udp_log_shipping_port = undef # syslog port (default: 514) 
 
 
-
   $high_availability_mountpoint = undef # Prevents omnibus-gitlab services (nginx, redis, unicorn etc.) from starting before a given filesystem is mounted
 
+  #
+  # 6. Database customization
+  # ==========================
+  $postgresql_enable  = true
+  $mysql_enable       = false
+  $db_adapter         = 'postgresql' # (default: 'postgresql')
+  $db_encoding        = 'utf-8' # (default: 'utf-8')
+  $db_database        = 'gitlabhq_production' # (default: 'gitlabhq_production')
+  $db_pool            = 10 # (default: 10)
+  $db_username        = 'gitlab' # (default: 'gitlab')
+  $db_password        = undef # (default: nil)
+  $db_host            = undef # (default: nil)
+  $db_port            = 5432 # (default: 5432)
+  $db_socket          = undef # (default: nil)
 }
