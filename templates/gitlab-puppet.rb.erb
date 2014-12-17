@@ -143,5 +143,13 @@ gitlab_rails['smtp_enable_starttls_auto'] = <%= @smtp_enable_starttls_auto %>
 <% if @udp_log_shipping_host and @gitlab_release == 'enterprise' %>logging['udp_log_shipping_host'] = '<%= @udp_log_shipping_host %>'
 <% end -%><% if @udp_log_shipping_port and @gitlab_release == 'enterprise' -%>logging['udp_log_shipping_port'] = '<%= @udp_log_shipping_port %>'
 <% end -%>
+
+<% if defined?(@unicorn_listen_ip) -%>unicorn['listen'] = '<%= @unicorn_listen_ip %>'
+<% end %>
+
 <% if defined?(@high_availability_mountpoint) -%>high_availability['mountpoint'] = '<%= @high_availability_mountpoint %>'
 <% end %>
+
+#
+# 6. Database settings
+# ==========================

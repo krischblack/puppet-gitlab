@@ -173,6 +173,18 @@ class gitlab::params {
   $smtp_authentication       = undef # 'login'
   $smtp_enable_starttls_auto = true
 
+  $nginx_enable              = true # make use of the packaged nginx (default true)
+  $unicorn_listen_ip         = undef # unicorn listening ip (default: 127.0.0.1)
+
+  $postgresql_enable         = true
+  $db_adapter                = 'postgresql'
+  $db_encoding               = 'unicode'
+  $db_host                   = 'localhost'
+  $db_port                   = 5432
+  $db_username               = 'git'
+  $db_password               = undef
+
+
   # Below are the default values
   $svlogd_size      = 200 * 1024 * 1024 # rotate after 200 MB of log data
   $svlogd_num       = 30 # keep 30 rotated log files
@@ -184,6 +196,8 @@ class gitlab::params {
   # Enterprise Only Features
   $udp_log_shipping_host = undef # e.g. '192.0.2.0' Ip of syslog server
   $udp_log_shipping_port = undef # syslog port (default: 514) 
+
+
 
   $high_availability_mountpoint = undef # Prevents omnibus-gitlab services (nginx, redis, unicorn etc.) from starting before a given filesystem is mounted
 

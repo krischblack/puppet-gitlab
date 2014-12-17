@@ -729,7 +729,18 @@ class gitlab (
   $smtp_domain               = $::gitlab::params::smtp_domain,
   $smtp_authentication       = $::gitlab::params::smtp_authentication,
   $smtp_enable_starttls_auto = $::gitlab::params::smtp_enable_starttls_auto,
-  
+
+  $nginx_enable              = $::gitlab::params::nginx_enable,
+  $unicorn_listen_ip         = $::gitlab::params::unicorn_listen_ip,
+
+  $postgresql_enable         = $::gitlab::params::postgresql_enable,
+  $db_adapter                = $::gitlab::params::db_adapter,
+  $db_encoding               = $::gitlab::params::db_encoding,
+  $db_host                   = $::gitlab::params::db_host,
+  $db_port                   = $::gitlab::params::db_port,
+  $db_username               = $::gitlab::params::db_username,
+  $db_password               = $::gitlab::params::db_password,
+
   $svlogd_size      = $::gitlab::params::svlogd_size,
   $svlogd_num       = $::gitlab::params::svlogd_num,
   $svlogd_timeout   = $::gitlab::params::svlogd_timeout,
@@ -739,6 +750,8 @@ class gitlab (
 
   $udp_log_shipping_host = $::gitlab::params::udp_log_shipping_host,
   $udp_log_shipping_port = $::gitlab::params::udp_log_shipping_port,
+
+
 
   $high_availability_mountpoint = $::gitlab::params::high_availability_mountpoint,
 
