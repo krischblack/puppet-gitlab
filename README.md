@@ -74,7 +74,7 @@ Additional Gitlab enterprise specific download information is covered later in t
 If for whatever reason you don't want puppet to download the omnibus package automatically, 
 you could manually place it in `/var/tmp` instead. 
 
-```
+```puppet
 $ ls /var/tmp
 /var/tmp/gitlab-7.0.0_omnibus-1.el6.x86_64.rpm
 /var/tmp/gitlab_7.0.0-omnibus-1_amd64.deb
@@ -99,7 +99,7 @@ $ ls /var/tmp
 
 BareBones (not recomended)
 
-```
+```puppet
 class { 'gitlab' : 
   puppet_manage_config   => false,
   gitlab_branch          => '7.0.0',
@@ -109,7 +109,7 @@ class { 'gitlab' :
 
 Basic Example with https
 
-```
+```puppet
 class { 'gitlab' : 
   puppet_manage_config   => true,
   puppet_manage_backups  => true,
@@ -126,7 +126,7 @@ class { 'gitlab' :
 
 
 Ldap with Active Directory
-```
+```puppet
 class { 'gitlab' : 
     puppet_manage_config              => true,
     puppet_manage_backups             => true,
@@ -151,7 +151,7 @@ class { 'gitlab' :
 ```
 
 Ldap with Active Directory (Gitlab >=7.4)
-```
+```puppet
 # Gitlab 7.4 introduced a new ldap_servers parameter
 # It combines all ldap settings into one json string, and also supports multiple ldap servers. 
 # Both the old and syntax will continue to work. If using both simultainously, gitlab will prefer the older syntax. 
@@ -206,7 +206,7 @@ class { 'gitlab' :
 
 
 Manage packages, backups and config file manually
-```
+```puppet
 class { 'gitlab' : 
   puppet_manage_config   => false,
   puppet_manage_backups  => false,
@@ -226,7 +226,7 @@ The parameters above are typically placed inside a wrapper puppet module, or ins
 You can alternativly put the parameters inside hiera. This has the advantage of keeping your wrapper puppet module (or nodes.pp file) clean, and also keeps things like passwords outside of version control. 
 
 gitlab.example.com.yaml
-```
+```YAML
 ---
   gitlab::puppet_manage_config:   true
   gitlab::puppet_manage_backups:  true
@@ -247,7 +247,7 @@ gitlab.example.com.yaml
 This puppet module manages the `/etc/gitlab/gitlab.rb` file and leverages omnibus to apply the configuration. Nearly all of the config options are available as puppet class parameters. 
   
 If you would rather manage `/etc/gitlab/gitlab.rb` manually, set `$puppet_manage_config` to false
-```
+```puppet
 class { 'gitlab' :
   gitlab_branch           => '7.0.0',
   external_url            => 'http://foo.bar',
@@ -258,7 +258,40 @@ class { 'gitlab' :
 
 [Manage /etc/gitlab/gitlab.rb manually](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md)
 
+## Custom Hooks
 
+As of GitLab 7.5 and GitLab Shell 2.1.0, users can create custom `pre-receive`, `post-receive` and `update` hooks
+on the filesystem for each project. These hooks act just as normal server-side git hooks but are configured in
+a little different way by placing the file in `custom_hooks` instead of `hooks`.
+
+This module supports managing these custom hooks through a defined-type. A hook of each type (`pre-receive`,
+`post-receive` and `update`) can be created for each project in GitLab. See
+[GitLab Custom Hook documentation](https://github.com/gitlabhq/gitlabhq/blob/master/doc/hooks/custom_hooks.md)
+for more information.
+
+Pass the script contents as a string
+
+```puppet
+gitlab::custom_hook { 'project1_custom_hook':
+  namespace             => 'group1',
+  project               => 'my_project',
+  type                  => 'post-receive',
+  content               => "#!/bin/bash
+
+echo 'This is a post-receive hook!'",
+}
+```
+
+Pass a file as a source
+
+```puppet
+gitlab::custom_hook { 'project1_custom_hook':
+  namespace             => 'group1',
+  project               => 'my_project',
+  type                  => 'post-receive',
+  source                => 'puppet:///modules/my_module/post-receive',
+}
+```
 
 ###Enterprise
 
@@ -268,7 +301,7 @@ This puppet module supports gitlab enterprise installations. There are several p
 
 **Example**  
 
-```
+```puppet
 class { 'gitlab' : 
   gitlab_branch        => '7.0.0',
   gitlab_release       => 'enterprise',
@@ -283,7 +316,28 @@ class { 'gitlab' :
 }
 ```
 
+Enterprise Omnibus packages supports MySQL and includes the `mysql2` gem. This
+module supports MySQL, but does not manage the installation and configuration
+of MySQL directly. The user is responsible for configuring MySQL and setting up
+the database and database user. Then pass the proper host, port, username, and
+password to this module to configure GitLab.
 
+```puppet
+class { 'gitlab' :
+  gitlab_branch                     => '7.0.0',
+  gitlab_release                    => 'enterprise',
+  gitlab_download_link              => 'http://secret_url/ubuntu-12.04/gitlab_7.0.0-omnibus-1_amd64.deb'
+
+  # Disable postgresql and enable mysql
+  postgresql_enable                 => false,
+  mysql_enable                      => true,
+  db_adapter                        => 'mysql2',
+  db_host                           => '127.0.0.1',
+  db_port                           => '3306',
+  db_username                       => 'gitlab',
+  db_password                       => 'super_secret',
+}
+```
 
 ## Upgrade
 
@@ -301,7 +355,6 @@ To upgrade:
 1. Does not manage the firewall, run `lokkit -s https -s ssh` or edit iptables. 
 2. When attempting to autodownload, assumes that the release number is always 1 in the file name. eg. `gitlab_7.0.0-omnibus-1_amd64.deb`
 3. Omniauth and enterprise are not tested. Please submit a github issue if problems are found.
-4. Only supports omnibus provided nginx and postgres services. Apache and MySQL are not available. 
 
 #### Contact  
 twitter => [@spencer450](https://twitter.com/spencer450)   
@@ -312,7 +365,7 @@ irc     => spuder
 ## Parameters Continued
 
 
-```
+```puppet
 # === Parameters
 #
 # [*puppet_manage_config*]

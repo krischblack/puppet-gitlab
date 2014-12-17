@@ -136,6 +136,18 @@ class gitlab::params {
   #
   # 5. Omnibus customization
   # ==========================
+  $postgresql_enable  = true
+  $mysql_enable       = false
+  $db_adapter         = undef # (default: 'postgresql')
+  $db_encoding        = undef # (default: 'unicode')
+  $db_database        = undef # (default: 'gitlabhq_production')
+  $db_pool            = undef # (default: 10)
+  $db_username        = undef # (default: 'gitlab')
+  $db_password        = undef # (default: nil)
+  $db_host            = undef # (default: nil)
+  $db_port            = undef # (default: 5432)
+  $db_socket          = undef # (default: nil)
+
   $redis_port       = undef # (default: 6379)
   $postgresql_port  = undef # (default: 5432)
   $unicorn_port     = undef # (default: 8080)

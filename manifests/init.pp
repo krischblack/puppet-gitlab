@@ -373,10 +373,61 @@
 # 5. Omnibus customization
 # ==========================
 #
-# [*redis_port*]
+# [*postgresql_enable*]
+#     default => true
+#     Set to false if using MySQL or if managing postgreSQL outside of Omnibus
+#
+# [*mysql_enable*]
+#     default => false
+#     For enterprise only, use MySQL instead of PostgreSQL
+#
+# [*db_encoding*]
 #     default => undef
-#     Deprecated in 7.3: Port redis runs on
-#     Example: 6379
+#     The database encoding. Only available if `postgresql_enable` is false
+#     or `mysql_enable` is true.
+#     Example: 'unicode'
+#
+# [*db_database*]
+#     default => undef
+#     The database name. Only available if `postgresql_enable` is false
+#     or `mysql_enable` is true.
+#     Example: 'gitlabhq_production'
+#
+# [*db_pool*]
+#     default => 10
+#     The database pool size. Only available if `postgresql_enable` is false
+#     or `mysql_enable` is true.
+#     Example: 20
+#
+# [*db_username*]
+#     default => 'git'
+#     The database username. Only available if `postgresql_enable` is false
+#     or `mysql_enable` is true.
+#     Example: 'gitlab'
+#
+# [*db_password*]
+#     default => undef
+#     The database password. Only available if `postgresql_enable` is false
+#     or `mysql_enable` is true.
+#     Example: 'secret_password'
+#
+# [*db_host*]
+#     default => undef
+#     The database hostname. Only available if `postgresql_enable` is false
+#     or `mysql_enable` is true.
+#     Example: '127.0.0.1'
+#
+# [*db_socket*]
+#     default => undef
+#     Specify a database socket to use instead of a port. Only available if
+#     `postgresql_enable` is false or `mysql_enable` is true.
+#     Example: 'unix://path/to/db/socket.sock'
+#
+# [*db_port*]
+#     default => undef
+#     The database port. This value must be set to match `postgresql_port` if
+#     that value is changed,
+#     Example: 5432
 #
 # [*postgresql_port*]
 #     default => undef
@@ -693,6 +744,18 @@ class gitlab (
   # 5. Omnibus customization
   # ==========================
 
+  $postgresql_enable  = $::gitlab::params::postgresql_enable,
+  $mysql_enable       = $::gitlab::params::mysql_enable,
+  $db_adapter         = $::gitlab::params::db_adapter,
+  $db_encoding        = $::gitlab::params::db_encoding,
+  $db_database        = $::gitlab::params::db_database,
+  $db_username        = $::gitlab::params::db_username,
+  $db_password        = $::gitlab::params::db_password,
+  $db_pool            = $::gitlab::params::db_pool,
+  $db_host            = $::gitlab::params::db_host,
+  $db_port            = $::gitlab::params::db_port,
+  $db_socket          = $::gitlab::params::db_socket,
+
   $redis_port       = $::gitlab::params::redis_port,
   $postgresql_port  = $::gitlab::params::postgresql_port,
   $unicorn_port     = $::gitlab::params::unicorn_port,
@@ -784,10 +847,13 @@ class gitlab (
   # Verify parameters are valid for the release of gitlab
   if $gitlab_release != 'enterprise' {
     if $ldap_sync_ssh_keys {
-      fail("\$ldap_sync_ssh_keys is only available in enterprise edtition, gitlab_release is: \'${gitlab_release}\'")
+      fail("\$ldap_sync_ssh_keys is only available in enterprise edition, gitlab_release is: \'${gitlab_release}\'")
     }
     if $ldap_admin_group {
-      fail("\$ldap_admin_group is only available in enterprise edtition, gitlab_release is: \'${gitlab_release}\'")
+      fail("\$ldap_admin_group is only available in enterprise edition, gitlab_release is: \'${gitlab_release}\'")
+    }
+    if $mysql_enable {
+      fail("\$mysql_enable is only available in enterprise edition, gitlab_release is: \'${gitlab_release}\'")
     }
   }
 
@@ -839,6 +905,25 @@ class gitlab (
   }
   else {
     warning('Puppet is not creating gitlab backups, recommend setting $puppet_manage_backups => true')
+  }
+
+  if $mysql_enable {
+    if $postgresql_enable != false {
+      fail('postgresql_enable must be false if mysql_enable is true')
+    }
+    if $db_adapter != 'mysql2' {
+      fail('db_adapter must be mysql2 if mysql_enable is true')
+    }
+  }
+
+  if ($db_adapter or $db_encoding or $db_database or $db_pool or $db_username
+    or $db_password or $db_host or $db_socket)
+    and ($postgresql_enable == undef or $postgresql_enable or !$mysql_enable) {
+    fail('db_adapter, db_encoding, db_database, db_pool, db_username, db_password, db_host, and db_socket cannot be set unless postgres_enable is false or mysql_enable is true')
+  }
+
+  if $postgresql_port and !$db_port {
+    fail('if postgresql_port is specified, db_port must match')
   }
 
   # Ensure high_availability_mountpoint is only used with gitlab > 7.2.x
