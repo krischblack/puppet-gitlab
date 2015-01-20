@@ -798,20 +798,20 @@ class gitlab (
 
   $nginx_enable              = $::gitlab::params::nginx_enable,
   $unicorn_listen_ip         = $::gitlab::params::unicorn_listen_ip,
-  $web_server_external_user  = $::gitlab::params::web_server_external_user
-  $web_server_group          = $::gitlab::params::web_server_group
-  $web_server_username       = $::gitlab::params::web_server_username
-  $web_server_uid            = $::gitlab::params::web_server_uid
-  $web_server_gid            = $::gitlab::params::web_server_gid
-  $unicorn_worker_timeout    = $::gitlab::params::unicorn_worker_timeout
-  $unicorn_worker_processes  = $::gitlab::params::unicorn_worker_processes
-  $unicorn_listen_ip         = $::gitlab::params::unicorn_listen_ip
-  $unicorn_port              = $::gitlab::params::unicorn_port
-  $unicorn_socket            = $::gitlab::params::unicorn_socket
-  $unicorn_pidfile           = $::gitlab::params::unicorn_pidfile
-  $unicorn_tcp_nopush        = $::gitlab::params::unicorn_tcp_nopush
-  $unicorn_backlog_socket    = $::gitlab::params::unicorn_backlog_socket
-  $unicorn_log_directory     = $::gitlab::params::unicorn_log_directory
+  $web_server_external_user  = $::gitlab::params::web_server_external_user,
+  $web_server_group          = $::gitlab::params::web_server_group,
+  $web_server_username       = $::gitlab::params::web_server_username,
+  $web_server_uid            = $::gitlab::params::web_server_uid,
+  $web_server_gid            = $::gitlab::params::web_server_gid,
+  $unicorn_worker_timeout    = $::gitlab::params::unicorn_worker_timeout,
+  $unicorn_worker_processes  = $::gitlab::params::unicorn_worker_processes,
+  $unicorn_listen_ip         = $::gitlab::params::unicorn_listen_ip,
+  $unicorn_port              = $::gitlab::params::unicorn_port,
+  $unicorn_socket            = $::gitlab::params::unicorn_socket,
+  $unicorn_pidfile           = $::gitlab::params::unicorn_pidfile,
+  $unicorn_tcp_nopush        = $::gitlab::params::unicorn_tcp_nopush,
+  $unicorn_backlog_socket    = $::gitlab::params::unicorn_backlog_socket,
+  $unicorn_log_directory     = $::gitlab::params::unicorn_log_directory,
 
 
   $postgresql_enable         = $::gitlab::params::postgresql_enable,
