@@ -43,7 +43,7 @@ class gitlab::config inherits ::gitlab {
   exec { 'stop gitlab':
     refreshonly => true,
     timeout     => 1800,
-    command     => '/usr/bin/gitlab-ctl stop nginx',
+    command     => '/usr/bin/gitlab-ctl stop',
     subscribe   => Package['gitlab'],
     notify      => Exec['/usr/bin/gitlab-ctl reconfigure'],
     before      => [ Exec['/usr/bin/gitlab-ctl reconfigure'], Exec['start gitlab'] ],
