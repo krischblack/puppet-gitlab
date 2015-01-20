@@ -97,7 +97,6 @@ gitlab_rails['ldap_admin_group'] = '<%= @ldap_admin_group %>'
 <% if @db_port -%>gitlab_rails['db_port'] = '<%= @db_port %>'
 <% end %><% if @redis_port      -%>redis['port'] = <%= @redis_port %>
 <% end %><% if @postgresql_port -%>postgresql['port'] = <%= @postgresql_port %>
-<% end %><% if @unicorn_port     -%>unicorn['port'] = <%= @unicorn_port %>
 <% end %><% if @git_data_dir     -%>git_data_dir = '<%= @git_data_dir  %>'
 <% end %><% if @gitlab_username  -%>user['username'] = '<%= @gitlab_username  %>'
 <% end %><% if @gitlab_group     -%>user['group'] = '<%= @gitlab_group  %>'
@@ -145,11 +144,45 @@ gitlab_rails['smtp_enable_starttls_auto'] = <%= @smtp_enable_starttls_auto %>
 <% end -%><% if @udp_log_shipping_port and @gitlab_release == 'enterprise' -%>logging['udp_log_shipping_port'] = '<%= @udp_log_shipping_port %>'
 <% end -%>
 
-<% if defined?(@unicorn_listen_ip) -%>unicorn['listen'] = '<%= @unicorn_listen_ip %>'
-<% end %>
+
 
 <% if defined?(@high_availability_mountpoint) -%>high_availability['mountpoint'] = '<%= @high_availability_mountpoint %>'
 <% end %>
+
+#####################
+# GitLab Web server #
+#####################
+## see: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/nginx.md#using-a-non-bundled-web-server
+## When bundled nginx is disabled we need to add the external webserver user to the GitLab webserver group.
+<% if defined?(@web_server_external_user) -%>web_server['external_users'] = '<%= @web_server_external_user %>'<% end %>
+<% if defined?(@web_server_username) -%>web_server['username'] = '<%= @web_server_username %>'<% end %>
+<% if defined?(@web_server_group) -%>web_server['group'] = '<%= @web_server_group %>'<% end %>
+<% if defined?(@web_server_uid) -%>web_server['uid'] = '<%= @web_server_uid %>'<% end %>
+<% if defined?(@web_server_gid) -%>web_server['gid'] = '<%= @web_server_gid %>'<% end %>
+
+################
+# GitLab Nginx #
+################
+## see: https://gitlab.com/gitlab-org/omnibus-gitlab/tree/629def0a7a26e7c2326566f0758d4a27857b52a3/doc/settings/nginx.md
+<% if defined?(@nginx_enable) -%>nginx['enable'] = '<%= @nginx_enable %>'<% end %>
+
+##################
+# GitLab Unicorn #
+##################
+## Tweak unicorn settings.
+<% if defined?(@unicorn_worker_timeout) -%>unicorn['worker_timeout'] = <%= @unicorn_worker_timeout %>'<% end %>
+<% if defined?(@unicorn_worker_processes) -%>unicorn['worker_processes'] = <%= @unicorn_worker_processes %>'<% end %>
+
+## Advanced settings
+<% if defined?(@unicorn_listen_ip) -%>unicorn['listen'] = '<%= @unicorn_listen_ip %>'<% end %>
+<% if defined?(@unicorn_port) -%>unicorn['port'] = <%= @unicorn_port %>'<% end %>
+<% if defined?(@unicorn_socket) -%>unicorn['socket'] = <%= @unicorn_socket %>'<% end %>
+<% if defined?(@unicorn_pidfile) -%>unicorn['pidfile'] = <%= @unicorn_pidfile %>'<% end %>
+<% if defined?(@unicorn_tcp_nopush) -%>unicorn['tcp_nopush'] = <%= @unicorn_tcp_nopush %>'<% end %>
+<% if defined?(@unicorn_backlog_socket) -%>unicorn['backlog_socket'] = <%= @unicorn_backlog_socket %>'<% end %>
+<% if defined?(@unicorn_log_directory) -%>
+# We do not recommend changing this setting
+unicorn['log_directory'] = <%= @unicorn_log_directory %>'<% end %>
 
 #
 # 6. Database settings

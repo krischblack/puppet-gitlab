@@ -138,7 +138,6 @@ class gitlab::params {
   # ==========================
   $redis_port       = undef # (default: 6379)
   $postgresql_port  = undef # (default: 5432)
-  $unicorn_port     = undef # (default: 8080)
 
   $git_data_dir     = undef # '/var/opt/gitlab/git-data'
   $gitlab_username  = undef # (default: 'gitlab')
@@ -174,7 +173,24 @@ class gitlab::params {
   $smtp_enable_starttls_auto = true
 
   $nginx_enable              = true # make use of the packaged nginx (default true)
-  $unicorn_listen_ip         = undef # unicorn listening ip (default: 127.0.0.1)
+  $web_server_external_user  = undef # (default: ['www-data'])
+  $web_server_group          = undef # (default: 'gitlab-www')
+  $web_server_username       = undef # (default: 'gitlab-www')
+  $web_server_uid            = undef
+  $web_server_gid            = undef
+
+
+  $unicorn_worker_timeout   = undef # (default: 60)
+  $unicorn_worker_processes = undef # (default: 2)
+  $unicorn_listen_ip        = undef # unicorn listening ip (default: 127.0.0.1)
+  $unicorn_port             = undef # (default: 8080)
+  $unicorn_socket           = undef # (default: '/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket')
+  $unicorn_pidfile          = undef # (default: '/opt/gitlab/var/unicorn/unicorn.pid')
+  $unicorn_tcp_nopush       = undef # (default: true)
+  $unicorn_backlog_socket   = undef # (default: 1024)
+  $unicorn_log_directory    = undef # (default: "/var/log/gitlab/unicorn")
+  
+
 
   # Below are the default values
   $svlogd_size      = 200 * 1024 * 1024 # rotate after 200 MB of log data
