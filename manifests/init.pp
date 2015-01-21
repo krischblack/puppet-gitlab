@@ -734,6 +734,8 @@ class gitlab (
   $git_max_size                = $::gitlab::params::git_max_size,
   $git_timeout                 = $::gitlab::params::git_timeout,
 
+  $rails_env				   = $::gitlab::params::rails_env,
+
   #
   # 4. Extra customization
   # ==========================

@@ -123,6 +123,8 @@ class gitlab::params {
   $git_max_size                = undef # Incrase if large commits fail over https (default: 5242880) 5242880=5MB
   $git_timeout                 = undef # 10
 
+  $rails_env                   = undef # for settings rails env entries, f.e.: gitlab_rails['env'] = {"RAILS_RELATIVE_URL_ROOT" => "/gitlab"}
+
   #
   # 4. Extra customization
   # ==========================
