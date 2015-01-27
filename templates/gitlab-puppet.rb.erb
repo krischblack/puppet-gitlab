@@ -22,6 +22,7 @@
 <% end %><% if defined?(@gitlab_default_projects_features_wiki) -%>gitlab_rails['gitlab_default_projects_features_wiki'] = <%= @gitlab_default_projects_features_wiki %>
 <% end %><% if defined?(@gitlab_default_projects_features_snippets) -%>gitlab_rails['gitlab_default_projects_features_snippets'] = <%= @gitlab_default_projects_features_snippets %>
 <% end %><% if @gitlab_default_projects_features_visibility_level -%>gitlab_rails['gitlab_default_projects_features_visibility_level'] = '<%= @gitlab_default_projects_features_visibility_level %>'
+<% end %><% if defined?(@webhook_timeout) -%>gitlab_rails['webhook_timeout'] = <%= @webhook_timeout %>
 <% end %><% if @issues_tracker_redmine == true %>
 gitlab_rails['issues_tracker_redmine'] = <%= @issues_tracker_redmine %>
 gitlab_rails['issues_tracker_redmine_title'] = '<%= @issues_tracker_redmine_title %>'
@@ -211,3 +212,18 @@ postgresql['enable'] = <%= @postgresql_enable %>
 <% if @db_host -%>gitlab_rails['db_host'] = '<%= @db_host %>'<% end %>
 	<% end -%>
 <% end -%>
+#
+# 6. GitLab CI customization
+# ==========================
+<% if @ci_external_url -%>ci_external_url '<%= @ci_external_url %>'
+<% end %><% if @gitlab_ci_email_from -%>gitlab_ci['gitlab_ci_email_from'] = '<%= @gitlab_ci_email_from %>'
+<% end %><% if @gitlab_ci_support_email -%>gitlab_ci['gitlab_ci_support_email'] = '<%= @gitlab_ci_support_email %>'
+<% end %><% if @gitlab_server_urls -%>
+gitlab_ci['gitlab_server_urls'] = ["<%= @gitlab_server_urls.join('","') %>"]
+<% end %><% if @ci_redirect_http_to_https == true -%>
+ci_nginx['redirect_http_to_https'] = <%= @ci_redirect_http_to_https %>
+ci_nginx['ssl_certificate'] = '<%= @ci_ssl_certificate -%>'
+ci_nginx['ssl_certificate_key'] = '<%= @ci_ssl_certificate_key %>'
+<% end -%><% if @ci_listen_addresses -%>
+ci_nginx['listen_addresses'] = ["<%= @ci_listen_addresses.join('","') %>"]
+<% end %>

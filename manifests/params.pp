@@ -51,6 +51,8 @@ class gitlab::params {
   $gitlab_default_projects_features_snippets         = undef # Like github 'gits' (default: true)
   $gitlab_default_projects_features_visibility_level = undef # Project visibility ['public' | 'internal' | 'private'] (default: 'private')
 
+  $webhook_timeout = undef # Number of seconds to wait for HTTP response after sending webhook HTTP POST request (default: 10)
+
   $issues_tracker_redmine               = undef # Integrate with redmine issue tracker (default: false)
   $issues_tracker_redmine_title         = undef # 'title'
   $issues_tracker_redmine_project_url   = undef # 'http://foo/bar'
@@ -223,4 +225,15 @@ class gitlab::params {
   $db_host            = undef # (default: nil)
   $db_port            = 5432 # (default: 5432)
   $db_socket          = undef # (default: nil)
+  # 6. GitLab CI customization
+  # ==========================
+  $ci_external_url         = undef
+  $gitlab_ci_email_from    = undef
+  $gitlab_ci_support_email = undef
+  $gitlab_server_urls      = undef
+
+  $ci_redirect_http_to_https = undef
+  $ci_ssl_certificate        = undef
+  $ci_ssl_certificate_key    = undef
+  $ci_listen_addresses       = undef
 }

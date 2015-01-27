@@ -114,6 +114,12 @@
 #    Project visibility ['public' | 'internal' | 'private'] (gitlab default: 'private')
 #    Example: false
 #
+# [*webhook_timeout*]
+#   default => undef
+#   Number of seconds to wait for HTTP response after sending webhook HTTP POST
+#   request (default: 10)
+#   Example: 10
+#
 # [*issues_tracker_redmine*]
 #    default => undef
 #    Integrate with redmine issue tracker (gitlab default: false)
@@ -668,6 +674,8 @@ class gitlab (
   $gitlab_default_projects_features_snippets         = $::gitlab::params::gitlab_default_projects_features_snippets,
   $gitlab_default_projects_features_visibility_level = $::gitlab::params::gitlab_default_projects_features_visibility_level,
 
+  $webhook_timeout = $::gitlab::params::webhook_timeout,
+
   $issues_tracker_redmine               = $::gitlab::params::issues_tracker_redmine,
   $issues_tracker_redmine_title         = $::gitlab::params::issues_tracker_redmine_title,
   $issues_tracker_redmine_project_url   = $::gitlab::params::issues_tracker_redmine_project_url,
@@ -837,6 +845,20 @@ class gitlab (
 
 
   $high_availability_mountpoint = $::gitlab::params::high_availability_mountpoint,
+
+  #
+  # 6. GitLab CI customization
+  # ==========================
+
+  $ci_external_url         = $::gitlab::params::ci_external_url,
+  $gitlab_ci_email_from    = $::gitlab::params::gitlab_ci_email_from,
+  $gitlab_ci_support_email = $::gitlab::params::gitlab_ci_support_email,
+  $gitlab_server_urls      = $::gitlab::params::gitlab_server_urls,
+
+  $ci_redirect_http_to_https = $::gitlab::params::ci_redirect_http_to_https,
+  $ci_ssl_certificate        = $::gitlab::params::ci_ssl_certificate,
+  $ci_ssl_certificate_key    = $::gitlab::params::ci_ssl_certificate_key,
+  $ci_listen_addresses       = $::gitlab::params::ci_listen_addresses,
 
   ) inherits gitlab::params {
 
